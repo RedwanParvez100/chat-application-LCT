@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7eeee;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #f7e9e9;
+            border-right: 1px solid #e4d5d5;
+            padding: 1rem;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 0;
+            background-color: #f7eeee;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 12px;
+            border-radius: 12px;
+            background-color: #f7e9e9;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #8b5353;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+        }
+
+        .chat-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .chat-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background-color: #f7e9e9;
+        }
+
+        .chat-list li:hover {
+            background-color: #f0e4e4;
+        }
+
+        .chat-list li::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #8b5353;
+            margin-right: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+        }
+
+        .chat-window {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f7eeee;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e4d5d5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f7e9e9;
+        }
+
+        .chat-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #2D1810;
+        }
+
+        .logout-btn {
+            background-color: #2D1810;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #3d2218;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: #f7eeee;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            max-width: 70%;
+        }
+
+        .message.sent {
+            background-color: white;
+            color: #2D1810;
+            margin-left: auto;
+        }
+
+        .message.received {
+            background-color: #8b5353;
+            color: white;
+            margin-right: auto;
+        }
+
+        .message.received::before {
+            content: '';
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #8b5353;
+            margin-right: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #e4d5d5;
+            background-color: #f7e9e9;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #e4d5d5;
+            border-radius: 6px;
+            margin-right: 12px;
+            font-size: 0.9rem;
+            background-color: white;
+        }
+
+        .chat-input input:focus {
+            outline: none;
+            border-color: #2D1810;
+        }
+
+        .chat-input button {
+            background-color: #2D1810;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .chat-input button:hover {
+            background-color: #3d2218;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar">J</div>
+                <span>John Doe</span>
+            </div>
+            <ul class="chat-list">
+                <li onclick="selectUser(1, 'Redwan')">Redwan</li>
+                <li onclick="selectUser(2, 'Rock')">Rock</li>
+                <li onclick="selectUser(3, 'Tasin')">Tasin</li>
+                <li onclick="selectUser(4, 'Jhon')">Jhon</li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="chat-window">
+                <div class="chat-header">
+                    <h2>To : Chat with Redwan</h2>
+                    <button onclick="location.href='/'" class="logout-btn">Logout</button>
+                </div>
+                <div id="chatMessages" class="chat-messages">
+                    <!-- Chat messages will go here -->
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="messageInput" placeholder="Type a message...">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentReceiverId = null;
+        let currentReceiverName = null;
+
+        // Function to switch between users
+        function selectUser(receiverId, receiverName) {
+            currentReceiverId = receiverId;
+            currentReceiverName = receiverName;
+
+            const chatHeader = document.querySelector(".chat-header h2");
+            chatHeader.textContent = `To: Chat with ${receiverName}`;
+
+            const chatMessages = document.getElementById("chatMessages");
+            chatMessages.innerHTML = ''; // Clear current chat messages
+
+            // Fetch previous messages for the selected user
+            fetch(`/chat/messages?senderId=1&receiverId=${receiverId}`)
+                .then(response => response.json())
+                .then(messages => {
+                    messages.forEach(message => {
+                        const messageElement = document.createElement("div");
+                        messageElement.className = message.sender_id === 1 ? "message sent" : "message received";
+                        messageElement.textContent = message.message;
+                        chatMessages.appendChild(messageElement);
+                    });
+                    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+                })
+                .catch(error => console.error("Error loading messages:", error));
+        }
+
+        // Send message function
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const chatMessages = document.getElementById("chatMessages");
+            const message = messageInput.value.trim();
+
+            if (!message || currentReceiverId === null) {
+                alert("Please enter a message and select a user.");
+                return;
+            }
+
+            const messageElement = document.createElement("div");
+            messageElement.className = "message sent";
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+
+            // Send the message to the server
+            fetch("/sendMessage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message,
+                    senderId: 1,
+                    receiverId: currentReceiverId
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log("Message sent successfully:", data);
+            })
+            .catch(error => console.error("Error sending message:", error));
+
+            // Clear the input field and scroll to the bottom
+            messageInput.value = "";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Add event listener for Enter key press
+        document.getElementById("messageInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
